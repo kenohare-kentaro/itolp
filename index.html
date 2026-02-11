@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ito - 毎日にやさしく寄り添う、刺繍ベビーアイテム。</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Config & Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            green: '#8CAE97',
+                            dark: '#333333',
+                            bg: '#F9FAFB'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif JP"', 'serif'],
+                        sans: ['"Zen Kaku Gothic New"', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Zen Kaku Gothic New", sans-serif;
+            color: #333333;
+            background-color: #F9FAFB;
+        }
+        h1, h2, h3, h4, .font-serif {
+            font-family: "Noto Serif JP", serif;
+        }
+        ::selection {
+            background-color: #8CAE97;
+            color: white;
+        }
+        /* Hide scrollbar for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Animation Utilities */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s ease-out;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Q&A Accordion */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+        .accordion-content.open {
+            max-height: 200px; /* Approximate max height */
+            opacity: 1;
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease;
+        }
+        .accordion-icon.rotate {
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body class="pb-20 md:pb-0">
+
+    <!-- Header -->
+    <header class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+            
+            <!-- Logo Area -->
+            <div class="flex items-center space-x-3">
+                <img src="https://images.unsplash.com/photo-1621112904887-419379ce6824?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="ito logo" class="w-8 h-8 rounded-full object-cover opacity-80">
+                <h1 class="text-2xl font-serif font-bold tracking-widest text-brand-dark">ito</h1>
+            </div>
+            
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex space-x-8 text-sm tracking-wide text-gray-600">
+                <a href="#about" class="hover:text-brand-green transition-colors duration-300">About</a>
+                <a href="#quality" class="hover:text-brand-green transition-colors duration-300">Quality</a>
+                <a href="#items" class="hover:text-brand-green transition-colors duration-300">Items</a>
+                <a href="#flow" class="hover:text-brand-green transition-colors duration-300">Flow</a>
+                <a href="#gift" class="hover:text-brand-green transition-colors duration-300">Gift</a>
+                <a href="#qa" class="hover:text-brand-green transition-colors duration-300">Q&A</a>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden p-2 text-gray-600">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-40 flex flex-col items-center justify-center space-y-8 opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="close-menu-btn" class="absolute top-4 right-6 p-2 text-gray-600">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+        <a href="#about" class="mobile-link text-xl font-serif text-gray-700 hover:text-brand-green">About</a>
+        <a href="#quality" class="mobile-link text-xl font-serif text-gray-700 hover:text-brand-green">Quality</a>
+        <a href="#items" class="mobile-link text-xl font-serif text-gray-700 hover:text-brand-green">Items</a>
+        <a href="#flow" class="mobile-link text-xl font-serif text-gray-700 hover:text-brand-green">Flow</a>
+        <a href="#gift" class="mobile-link text-xl font-serif text-gray-700 hover:text-brand-green">Gift</a>
+        <a href="#qa" class="mobile-link text-xl font-serif text-gray-700 hover:text-brand-green">Q&A</a>
+        <a href="https://forms.gle/B8feRC3EGqKPYLXw5" target="_blank" rel="noreferrer" class="mt-8 px-8 py-3 bg-brand-green text-white rounded-full shadow-lg active:scale-95 transition-transform">
+            Contact / Order
+        </a>
+    </div>
+
+    <!-- Floating Action Button -->
+    <a
+        id="floating-btn"
+        href="https://forms.gle/B8feRC3EGqKPYLXw5"
+        target="_blank"
+        rel="noreferrer"
+        class="fixed bottom-6 right-6 z-40 flex items-center bg-brand-green text-white px-6 py-4 rounded-full shadow-xl transition-all duration-500 opacity-0 translate-y-20 hover:bg-[#7a9d86] hover:scale-105 active:scale-95 group"
+    >
+        <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+        <span class="font-medium tracking-wide">ご注文・お問い合わせ</span>
+        <i data-lucide="chevron-right" class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"></i>
+    </a>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-24 pb-20 px-6 md:pt-32 md:pb-32 flex flex-col items-center text-center overflow-hidden">
+        <div class="absolute inset-0 -z-10 bg-gradient-to-b from-white to-[#F0F4F2]"></div>
+        
+        <!-- Main Visual Slider -->
+        <div class="w-full max-w-lg mx-auto aspect-[4/5] md:aspect-video bg-gray-200 rounded-[2rem] shadow-xl overflow-hidden relative mb-10">
+            <!-- Images will be controlled by JS -->
+            <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Main Visual 1" class="hero-img absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out opacity-100 scale-105">
+            <img src="https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Main Visual 2" class="hero-img absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out opacity-0 scale-100">
+            <img src="https://images.unsplash.com/photo-1605218427306-022ba8c93b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Main Visual 3" class="hero-img absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out opacity-0 scale-100">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            
+            <!-- Slider Indicators -->
+            <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 z-10" id="hero-indicators">
+                <!-- Indicators injected by JS -->
+            </div>
+        </div>
+
+        <h2 class="text-xl md:text-3xl font-serif font-medium leading-relaxed tracking-wider mb-6 animate-slide-up">
+            毎日にやさしく寄り添う、<br>
+            刺繍ベビーアイテム。
+        </h2>
+        
+        <p class="text-sm md:text-base text-gray-500 font-light tracking-wide animate-slide-up" style="animation-delay: 100ms;">
+            赤ちゃんとの何気ない毎日が、<br>
+            少しあたたかくなりますように。
+        </p>
+
+        <div class="mt-12 animate-bounce-slow text-brand-green">
+            <i data-lucide="chevron-right" class="w-6 h-6 rotate-90"></i>
+        </div>
+    </section>
+
+    <main class="max-w-3xl mx-auto px-5 space-y-24 pb-24">
+
+        <!-- About Section -->
+        <section id="about" class="reveal-on-scroll">
+            <div class="text-center mb-10">
+                <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">About ito</span>
+                <h3 class="text-2xl font-serif text-gray-800">わたしの育児から<br>生まれました。</h3>
+            </div>
+            
+            <div class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-brand-green/10 rounded-bl-full -mr-4 -mt-4"></div>
+                
+                <p class="text-gray-600 leading-8 mb-6 text-justify">
+                    育児の中で感じた「こんなのがあったらいいな」から生まれたito。<br><br>
+                    毎日使うものだからこそ、やさしくて、扱いやすくて、少し気分が上がるものを。<br>
+                    大量生産ではなく、ひとつひとつ丁寧に仕立てています。
+                </p>
+                <p class="text-gray-600 leading-8 text-justify">
+                    小さなハンドメイドブランドですが、<br>
+                    お子様の成長と共に長く愛されるブランドを目指して、<br>
+                    心を込めてお作りします。
+                </p>
+            </div>
+        </section>
+
+        <!-- Quality Section -->
+        <section id="quality" class="reveal-on-scroll">
+            <div class="text-center mb-10">
+                <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">Quality</span>
+                <h3 class="text-2xl font-serif text-gray-800">安心へのこだわり</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-50 hover:shadow-md transition-shadow duration-300 h-full">
+                    <div class="bg-[#f0f5f2] w-12 h-12 rounded-full flex items-center justify-center mb-4 text-brand-green">
+                        <i data-lucide="leaf" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-serif font-medium text-gray-800 mb-3">素材について</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">赤ちゃんの肌に触れる部分には、ガーゼや綿100％のオーガニックコットンを使用。縫い目が直接当たりにくい優しい設計です。</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-50 hover:shadow-md transition-shadow duration-300 h-full">
+                    <div class="bg-[#f0f5f2] w-12 h-12 rounded-full flex items-center justify-center mb-4 text-brand-green">
+                        <i data-lucide="scissors" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-serif font-medium text-gray-800 mb-3">縫製について</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">耐久性のあるシャッペスパン糸を使用。毎日の洗濯にも耐えられるよう、強度にも配慮して制作しています。</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-50 hover:shadow-md transition-shadow duration-300 h-full">
+                    <div class="bg-[#f0f5f2] w-12 h-12 rounded-full flex items-center justify-center mb-4 text-brand-green">
+                        <i data-lucide="star" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-serif font-medium text-gray-800 mb-3">制作環境</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">高性能ミシン JANOME SECIO 14000 にて制作。細かな刺繍のディテールまで美しく、丁寧に仕上げています。</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-2xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-50 hover:shadow-md transition-shadow duration-300 h-full">
+                    <div class="bg-[#f0f5f2] w-12 h-12 rounded-full flex items-center justify-center mb-4 text-brand-green">
+                        <i data-lucide="heart" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-lg font-serif font-medium text-gray-800 mb-3">デザイン</h4>
+                    <p class="text-sm text-gray-600 leading-relaxed text-justify">可愛すぎず、でも温かみのあるデザイン。ママもお子様も、そしてその親御様も安心できるトーンを大切にしています。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Items Section -->
+        <section id="items" class="reveal-on-scroll">
+            <div class="text-center mb-12">
+                <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">Items</span>
+                <h3 class="text-2xl font-serif text-gray-800">商品ラインナップ</h3>
+            </div>
+
+            <div class="space-y-8">
+                <!-- Item 1 -->
+                <div class="bg-white rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col md:flex-row border border-gray-50 group">
+                    <div class="md:w-1/3 aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                        <img src="https://images.unsplash.com/photo-1628255953049-5541e2bd5b48?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="刺繍スタイ" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 absolute inset-0">
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                        <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-1">BIB</span>
+                        <div class="flex justify-between items-baseline mb-3">
+                            <h4 class="text-xl font-serif font-medium text-gray-800">刺繍スタイ</h4>
+                            <span class="text-lg text-gray-600 font-light">¥1,200〜</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">肌あたりの良いガーゼ素材。名入れのほか、オリジナル刺繍も可能です。お気軽にご相談ください。</p>
+                        <div class="mt-auto inline-block bg-[#f2f7f4] px-3 py-1 rounded-full text-xs text-[#6e8a78]">
+                            <span class="font-bold mr-1">Recommend:</span> 出産祝いのプラスワンに
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="bg-white rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col md:flex-row border border-gray-50 group">
+                    <div class="md:w-1/3 aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                        <img src="https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="つけ襟" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 absolute inset-0">
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                        <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-1">COLLAR</span>
+                        <div class="flex justify-between items-baseline mb-3">
+                            <h4 class="text-xl font-serif font-medium text-gray-800">つけ襟</h4>
+                            <span class="text-lg text-gray-600 font-light">¥1,500〜</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">いつものお洋服にプラスするだけで、華やかな印象に。記念日フォトにもおすすめです。</p>
+                        <div class="mt-auto inline-block bg-[#f2f7f4] px-3 py-1 rounded-full text-xs text-[#6e8a78]">
+                            <span class="font-bold mr-1">Recommend:</span> ハーフバースデーや記念撮影に
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="bg-white rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col md:flex-row border border-gray-50 group">
+                    <div class="md:w-1/3 aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                        <img src="https://images.unsplash.com/photo-1616616016149-a2e6d628d011?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="小物・ポーチ" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 absolute inset-0">
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                        <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-1">Pouch & Goods</span>
+                        <div class="flex justify-between items-baseline mb-3">
+                            <h4 class="text-xl font-serif font-medium text-gray-800">小物・ポーチ</h4>
+                            <span class="text-lg text-gray-600 font-light">¥1,000〜</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">毎日持ち歩きたくなる、便利でかわいいポーチや小物たち。</p>
+                        <div class="mt-auto inline-block bg-[#f2f7f4] px-3 py-1 rounded-full text-xs text-[#6e8a78]">
+                            <span class="font-bold mr-1">Recommend:</span> ちょっとしたお礼やプチギフトに
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="bg-white rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col md:flex-row border border-gray-50 group">
+                    <div class="md:w-1/3 aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                        <img src="https://images.unsplash.com/photo-1522771753035-1a5b6564f3a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="ベビーウェア" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 absolute inset-0">
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                        <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-1">Wear</span>
+                        <div class="flex justify-between items-baseline mb-3">
+                            <h4 class="text-xl font-serif font-medium text-gray-800">ベビーウェア</h4>
+                            <span class="text-lg text-gray-600 font-light">¥3,500〜</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">特別な日にも、日常にも馴染むシンプルなデザイン。</p>
+                        <div class="mt-auto inline-block bg-[#f2f7f4] px-3 py-1 rounded-full text-xs text-[#6e8a78]">
+                            <span class="font-bold mr-1">Recommend:</span> お孫さんへのプレゼントに
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="bg-white rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col md:flex-row border border-gray-50 group">
+                    <div class="md:w-1/3 aspect-[4/3] overflow-hidden bg-gray-100 relative">
+                        <img src="https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="ギフトセット" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 absolute inset-0">
+                    </div>
+                    <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                        <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-1">Gift Set</span>
+                        <div class="flex justify-between items-baseline mb-3">
+                            <h4 class="text-xl font-serif font-medium text-gray-800">ギフトセット</h4>
+                            <span class="text-lg text-gray-600 font-light">¥3,000〜</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">人気アイテムを詰め合わせた、想いが伝わるセット。</p>
+                        <div class="mt-auto inline-block bg-[#f2f7f4] px-3 py-1 rounded-full text-xs text-[#6e8a78]">
+                            <span class="font-bold mr-1">Recommend:</span> 大切なご友人の出産祝いに
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gift Section -->
+        <section id="gift" class="reveal-on-scroll">
+            <div class="bg-[#f2f7f4] rounded-3xl p-8 md:p-12 relative overflow-hidden border border-[#e1ece6]">
+                <i data-lucide="gift" class="w-[120px] h-[120px] absolute -right-6 -bottom-6 text-brand-green/10 rotate-12"></i>
+                
+                <div class="relative z-10 text-center md:text-left">
+                    <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">Gift Wrapping</span>
+                    <h3 class="text-2xl font-serif text-gray-800 mb-6">大切な人へ、<br>やさしい贈りもの。</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        itoでは、受け取った瞬間から温かい気持ちになれるよう、<br class="hidden md:block">
+                        シンプルで丁寧なラッピングを心がけています。<br>
+                        メッセージカードの代筆も承っておりますので、<br class="hidden md:block">
+                        遠方の方へのギフトとしても安心してご利用ください。
+                    </p>
+                    <div class="inline-block bg-white px-4 py-2 rounded-full text-sm text-brand-green font-medium border border-brand-green/30 shadow-sm">
+                        ラッピング無料キャンペーン中
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Flow -->
+        <section id="flow" class="reveal-on-scroll">
+            <div class="text-center mb-12">
+                <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">How to Order</span>
+                <h3 class="text-2xl font-serif text-gray-800">ご注文の流れ</h3>
+            </div>
+
+            <div class="relative">
+                <!-- Vertical Line -->
+                <div class="absolute left-6 top-6 bottom-6 w-0.5 bg-gray-200 hidden md:block"></div>
+                
+                <div class="space-y-6">
+                    <!-- Step 1 -->
+                    <div class="relative flex items-start md:items-center bg-white p-5 rounded-2xl shadow-sm border border-gray-100 z-10">
+                        <div class="flex-shrink-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold font-serif text-lg mr-4">01</div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800 mb-1">商品選択</h4>
+                            <p class="text-sm text-gray-600">Instagramや商品一覧から、ご希望の商品をお選びください。</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="relative flex items-start md:items-center bg-white p-5 rounded-2xl shadow-sm border border-gray-100 z-10">
+                        <div class="flex-shrink-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold font-serif text-lg mr-4">02</div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800 mb-1">フォーム送信</h4>
+                            <p class="text-sm text-gray-600">Googleフォームより、必要事項を入力して送信してください。</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="relative flex items-start md:items-center bg-white p-5 rounded-2xl shadow-sm border border-gray-100 z-10">
+                        <div class="flex-shrink-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold font-serif text-lg mr-4">03</div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800 mb-1">確認連絡</h4>
+                            <p class="text-sm text-gray-600">在庫確認後、メールにて振込先や納期をご連絡いたします。</p>
+                        </div>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="relative flex items-start md:items-center bg-white p-5 rounded-2xl shadow-sm border border-gray-100 z-10">
+                        <div class="flex-shrink-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold font-serif text-lg mr-4">04</div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800 mb-1">お支払い</h4>
+                            <p class="text-sm text-gray-600">指定口座へのお振込み、またはPayPayでのお支払いが可能です。</p>
+                        </div>
+                    </div>
+                    <!-- Step 5 -->
+                    <div class="relative flex items-start md:items-center bg-white p-5 rounded-2xl shadow-sm border border-gray-100 z-10">
+                        <div class="flex-shrink-0 w-10 h-10 bg-brand-green text-white rounded-full flex items-center justify-center font-bold font-serif text-lg mr-4">05</div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800 mb-1">制作・発送</h4>
+                            <p class="text-sm text-gray-600">ご入金確認後、心を込めて制作・発送させていただきます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Q&A Section -->
+        <section id="qa" class="reveal-on-scroll">
+            <div class="text-center mb-10">
+                <span class="text-brand-green text-xs font-bold tracking-widest uppercase mb-2 block">Q&A</span>
+                <h3 class="text-2xl font-serif text-gray-800">よくあるご質問</h3>
+            </div>
+
+            <div class="space-y-4">
+                <!-- QA 1 -->
+                <div class="border-b border-gray-100 last:border-0 qa-item">
+                    <button class="w-full py-4 px-2 flex justify-between items-center text-left hover:bg-gray-50 rounded-lg transition-colors qa-trigger">
+                        <span class="font-medium text-gray-700 flex items-center">
+                            <i data-lucide="help-circle" class="w-[18px] h-[18px] text-brand-green mr-3"></i>
+                            洗濯機で洗えますか？
+                        </span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="p-4 pt-0 text-sm text-gray-500 leading-relaxed ml-7">
+                            はい、可能です。長くお使いいただくために、洗濯ネットのご使用を推奨しております。乾燥機のご使用は縮みの原因となりますのでお控えください。
+                        </p>
+                    </div>
+                </div>
+                <!-- QA 2 -->
+                <div class="border-b border-gray-100 last:border-0 qa-item">
+                    <button class="w-full py-4 px-2 flex justify-between items-center text-left hover:bg-gray-50 rounded-lg transition-colors qa-trigger">
+                        <span class="font-medium text-gray-700 flex items-center">
+                            <i data-lucide="help-circle" class="w-[18px] h-[18px] text-brand-green mr-3"></i>
+                            返品・交換はできますか？
+                        </span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="p-4 pt-0 text-sm text-gray-500 leading-relaxed ml-7">
+                            商品到着後7日以内の未使用品に限り、不良品等の場合は対応させていただきます。ハンドメイド品のため、イメージ違い等のお客様都合による返品はご遠慮いただいております。
+                        </p>
+                    </div>
+                </div>
+                <!-- QA 3 -->
+                <div class="border-b border-gray-100 last:border-0 qa-item">
+                    <button class="w-full py-4 px-2 flex justify-between items-center text-left hover:bg-gray-50 rounded-lg transition-colors qa-trigger">
+                        <span class="font-medium text-gray-700 flex items-center">
+                            <i data-lucide="help-circle" class="w-[18px] h-[18px] text-brand-green mr-3"></i>
+                            注文からどれくらいで届きますか？
+                        </span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400 transition-transform duration-300 accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <p class="p-4 pt-0 text-sm text-gray-500 leading-relaxed ml-7">
+                            在庫がある場合は3日以内、受注制作の場合は1〜2週間ほどお時間をいただいております。お急ぎの場合はご相談ください。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="text-center py-10 reveal-on-scroll">
+            <h3 class="text-2xl font-serif text-gray-800 mb-4">Contact</h3>
+            <p class="text-gray-500 mb-8">
+                ご注文・お問い合わせは<br>以下のフォームよりお願いいたします。
+            </p>
+
+            <a 
+                href="https://forms.gle/B8feRC3EGqKPYLXw5" 
+                target="_blank" 
+                rel="noreferrer"
+                class="group relative inline-flex items-center justify-center px-8 py-4 bg-brand-green text-white text-lg rounded-full font-medium tracking-wide shadow-lg hover:bg-[#7a9d86] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full max-w-sm"
+            >
+                <span class="mr-2">Googleフォームで注文する</span>
+                <i data-lucide="chevron-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            
+            <div class="mt-12 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 text-gray-400">
+                <a href="https://www.instagram.com/ito.shisyu?igsh=a2M5cHUzeXppM3du&utm_source=qr" target="_blank" rel="noreferrer" class="flex items-center hover:text-brand-green transition-colors">
+                    <i data-lucide="instagram" class="w-6 h-6"></i>
+                    <span class="ml-2 text-sm">@ito.shisyu</span>
+                </a>
+                <div class="flex items-center hover:text-brand-green transition-colors">
+                    <i data-lucide="mail" class="w-6 h-6"></i>
+                    <span class="ml-2 text-sm">ito.shisyu.765@gmail.com</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 py-8 text-center pb-24 md:pb-8">
+        <h2 class="text-xl font-serif font-bold text-brand-dark mb-4">ito</h2>
+        <p class="text-xs text-gray-400 tracking-wide">
+            &copy; 2026 ito
+        </p>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Logic
+            const menuBtn = document.getElementById('menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            const toggleMenu = () => {
+                const isHidden = mobileMenu.classList.contains('pointer-events-none');
+                if (isHidden) {
+                    mobileMenu.classList.remove('opacity-0', 'pointer-events-none');
+                } else {
+                    mobileMenu.classList.add('opacity-0', 'pointer-events-none');
+                }
+            };
+
+            menuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+            // Hero Slider Logic
+            const heroImgs = document.querySelectorAll('.hero-img');
+            const heroIndicators = document.getElementById('hero-indicators');
+            let currentHeroIndex = 0;
+
+            // Create indicators
+            heroImgs.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `w-2 h-2 rounded-full transition-all duration-300 ${index === 0 ? 'bg-white w-4' : 'bg-white/50'}`;
+                dot.onclick = () => setHeroIndex(index);
+                heroIndicators.appendChild(dot);
+            });
+
+            const setHeroIndex = (index) => {
+                currentHeroIndex = index;
+                heroImgs.forEach((img, i) => {
+                    if (i === index) {
+                        img.classList.remove('opacity-0', 'scale-100');
+                        img.classList.add('opacity-100', 'scale-105');
+                    } else {
+                        img.classList.add('opacity-0', 'scale-100');
+                        img.classList.remove('opacity-100', 'scale-105');
+                    }
+                });
+                // Update indicators
+                const dots = heroIndicators.children;
+                Array.from(dots).forEach((dot, i) => {
+                    if (i === index) {
+                        dot.className = 'w-2 h-2 rounded-full transition-all duration-300 bg-white w-4';
+                    } else {
+                        dot.className = 'w-2 h-2 rounded-full transition-all duration-300 bg-white/50';
+                    }
+                });
+            };
+
+            setInterval(() => {
+                setHeroIndex((currentHeroIndex + 1) % heroImgs.length);
+            }, 5000);
+
+            // Intersection Observer for Fade-in Animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+            // Floating Action Button Visibility
+            const floatingBtn = document.getElementById('floating-btn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    floatingBtn.classList.remove('opacity-0', 'translate-y-20');
+                } else {
+                    floatingBtn.classList.add('opacity-0', 'translate-y-20');
+                }
+            });
+
+            // Q&A Accordion
+            document.querySelectorAll('.qa-trigger').forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const content = trigger.nextElementSibling;
+                    const icon = trigger.querySelector('.accordion-icon');
+                    
+                    content.classList.toggle('open');
+                    icon.classList.toggle('rotate');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
